@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./assets/css/index.css" />
+    <title>Nicole Foster - Portfolio</title>
+  </head>
+  <body>
+    <!-- PARALLAX BACKGROUND -->
+    <div class="parallax-bg"></div>
+
+    <!-- FIXED NAVIGATION -->
+    <nav>
+      <button onclick="scrollToSection('home')">Home</button>
+      <button onclick="scrollToSection('me')">Me</button>
+      <button onclick="scrollToSection('projects')">Projects</button>
+      <button onclick="scrollToSection('contact')">Contact</button>
+    </nav>
+
+    <!-- HOME SECTION -->
+    <section id="home">
+      <div class="container">
+        <div class="home-title">
+          <h1>Hi, I am Nicole Foster</h1>
+          <p>A peruvian graphic designer based in Madrid.</p>
+        </div>
+
+        <div class="single-project-card" onclick="scrollToSection('me')">
+          <!-- 👇 PON TU URL DE IMAGEKIT AQUÍ PARA HOME -->
+          <img
+            src="https://ik.imagekit.io/foster2004/sample-video.mp4?updatedAt=1758201370921"
+            alt="Nicole Foster"
+            class="circle-logo"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ME SECTION -->
+    <section id="me">
+      <div class="container">
+        <div class="me-content">
+          <!-- 👇 PON TU URL DE IMAGEKIT AQUÍ PARA ME -->
+          <img
+            src="https://ik.imagekit.io/foster2004/sample-video.mp4?updatedAt=1758201370921"
+            alt="About Nicole"
+            class="me-photo"
+          />
+          <p class="me-text">
+            I'm a brand and graphic designer with 7 years of experience across
+            design studios, freelance projects, and my own creative studio. I
+            specialise in branding, visual identity systems, and art direction,
+            but my work spans a wide range of disciplines. Over the years, I've
+            held roles as a technical designer, lead designer, project manager,
+            and art director — contributing to everything from app and website
+            design to social media, packaging, presentations, animations, and
+            video content.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS SECTION -->
+    <section id="projects">
+      <div class="container">
+        <div class="projects-nav">
+          <button class="active" onclick="selectProject('wonderland', this)">
+            Wonderland
+          </button>
+          <button onclick="selectProject('beyondmeat', this)">
+            Beyond Meat
+          </button>
+          <button onclick="selectProject('mesa', this)">Mesa</button>
+          <button onclick="selectProject('reset', this)">Reset</button>
+        </div>
+
+        <div class="project-detail">
+          <div class="project-info">
+            <h2 id="project-title">Wonderland</h2>
+            <p id="project-description">
+              A visual system developed for the release of a new album by the
+              band Pompeya. The identity draws inspiration from the bold,
+              contemporary aesthetics of Berlin and Copenhagen — sharp
+              compositions, dynamic layouts, and unapologetically expressive
+              forms. At its core lie primitive 3D shapes, reinforcing the raw,
+              rhythmic quality of the design. The result is a light,
+              free-flowing visual language that mirrors Pompeya's sound:
+              effortless, vibrant, and full of movement.
+            </p>
+          </div>
+
+          <div class="project-visual">
+            <!-- 👇 IMAGEN PRINCIPAL DEL PROYECTO (se actualiza con JS) -->
+            <img
+              src="https://ik.imagekit.io/foster2004/sample-video.mp4?updatedAt=1758201370921"
+              alt="Project Image"
+              class="main-circle"
+              id="project-image"
+            />
+
+            <!-- 👇 COLOR PALETTE - 5 círculos de colores (se actualizan con JS) -->
+            <div class="color-dots">
+              <img src="" alt="Color 1" class="dot" id="color-1" />
+              <img src="" alt="Color 2" class="dot" id="color-2" />
+              <img src="" alt="Color 3" class="dot" id="color-3" />
+              <img src="" alt="Color 4" class="dot" id="color-4" />
+              <img src="" alt="Color 5" class="dot" id="color-5" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact">
+      <div class="container">
+        <div class="contact-grid">
+          <div class="contact-main">
+            <h2>Let's bring<br />nice ideas to life</h2>
+            <a href="mailto:nicolefoster.rds@gmail.com"
+              >nicolefoster.rds@gmail.com</a
+            >
+          </div>
+
+          <div class="social-links">
+            <div class="social-column">
+              <a href="#">Behance</a>
+              <a href="#">Instagram</a>
+              <a href="#">Linkedin</a>
+            </div>
+            <div class="social-column">
+              <a href="#">Telegram</a>
+              <a href="#">Pinterest</a>
+              <a href="#">SoundCloud</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="footer-item">
+          <svg
+            class="icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <span>Madrid, Spain</span>
+        </div>
+        <div class="footer-item">
+          <span>© 2025 Nicole Foster</span>
+        </div>
+      </footer>
+    </section>
+
+    <script>
+      // ================================================================
+      // 🎨 PROJECT DATA - PON TUS URLs DE IMAGEKIT AQUÍ
+      // ================================================================
+      const projects = {
+        wonderland: {
+          title: "Wonderland",
+          description:
+            "A visual system developed for the release of a new album by the band Pompeya. The identity draws inspiration from the bold, contemporary aesthetics of Berlin and Copenhagen — sharp compositions, dynamic layouts, and unapologetically expressive forms. At its core lie primitive 3D shapes, reinforcing the raw, rhythmic quality of the design. The result is a light, free-flowing visual language that mirrors Pompeya's sound: effortless, vibrant, and full of movement.",
+          // 👇 Imagen principal del proyecto
+          image:
+            "https://ik.imagekit.io/foster2004/sample-video.mp4?updatedAt=1758201370921",
+          // 👇 5 imágenes para la paleta de colores
+          colors: [
+            "TU_URL_IMAGEKIT_WONDERLAND_COLOR1",
+            "TU_URL_IMAGEKIT_WONDERLAND_COLOR2",
+            "TU_URL_IMAGEKIT_WONDERLAND_COLOR3",
+            "TU_URL_IMAGEKIT_WONDERLAND_COLOR4",
+            "TU_URL_IMAGEKIT_WONDERLAND_COLOR5",
+          ],
+        },
+        beyondmeat: {
+          title: "Beyond Meat",
+          description:
+            "A branding project inspired by Scandinavian minimalism and modern Danish design principles.",
+          image:
+            "https://ik.imagekit.io/foster2004/sample-video.mp4?updatedAt=1758201370921",
+          colors: [
+            "TU_URL_IMAGEKIT_BEYONDMEAT_COLOR1",
+            "TU_URL_IMAGEKIT_BEYONDMEAT_COLOR2",
+            "TU_URL_IMAGEKIT_BEYONDMEAT_COLOR3",
+            "TU_URL_IMAGEKIT_BEYONDMEAT_COLOR4",
+            "TU_URL_IMAGEKIT_BEYONDMEAT_COLOR5",
+          ],
+        },
+        mesa: {
+          title: "Mesa",
+          description:
+            "Visual identity system for a technology security company.",
+          image:
+            "https://ik.imagekit.io/foster2004/sample-video.mp4?updatedAt=1758201370921",
+          colors: [
+            "TU_URL_IMAGEKIT_MESA_COLOR1",
+            "TU_URL_IMAGEKIT_MESA_COLOR2",
+            "TU_URL_IMAGEKIT_MESA_COLOR3",
+            "TU_URL_IMAGEKIT_MESA_COLOR4",
+            "TU_URL_IMAGEKIT_MESA_COLOR5",
+          ],
+        },
+        reset: {
+          title: "Reset",
+          description: "Comprehensive brand identity for a lifestyle brand.",
+          image:
+            "https://ik.imagekit.io/foster2004/sample-video.mp4?updatedAt=1758201370921",
+          colors: [
+            "TU_URL_IMAGEKIT_RESET_COLOR1",
+            "TU_URL_IMAGEKIT_RESET_COLOR2",
+            "TU_URL_IMAGEKIT_RESET_COLOR3",
+            "TU_URL_IMAGEKIT_RESET_COLOR4",
+            "TU_URL_IMAGEKIT_RESET_COLOR5",
+          ],
+        },
+      };
+
+      // ================================================================
+      // SMOOTH SCROLL TO SECTION
+      // ================================================================
+      function scrollToSection(sectionId) {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+
+      // ================================================================
+      // SELECT PROJECT
+      // ================================================================
+      function selectProject(projectKey, button) {
+        const project = projects[projectKey];
+
+        // Update text
+        document.getElementById("project-title").textContent = project.title;
+        document.getElementById("project-description").textContent =
+          project.description;
+
+        // Update main project image
+        const projectImage = document.getElementById("project-image");
+        projectImage.src = project.image;
+
+        // Update color palette images
+        for (let i = 1; i <= 5; i++) {
+          const colorDot = document.getElementById(`color-${i}`);
+          colorDot.src = project.colors[i - 1];
+        }
+
+        // Update active button
+        const buttons = document.querySelectorAll(".projects-nav button");
+        buttons.forEach((btn) => btn.classList.remove("active"));
+        if (button) button.classList.add("active");
+      }
+
+      // ================================================================
+      // PARALLAX EFFECT
+      // ================================================================
+      let ticking = false;
+
+      function updateParallax() {
+        const scrolled = window.pageYOffset;
+        const parallaxBg = document.querySelector(".parallax-bg");
+        const rate = scrolled * 0.5;
+
+        parallaxBg.style.transform = `translateY(${rate}px)`;
+        ticking = false;
+      }
+
+      function requestParallaxUpdate() {
+        if (!ticking) {
+          window.requestAnimationFrame(updateParallax);
+          ticking = true;
+        }
+      }
+
+      window.addEventListener("scroll", requestParallaxUpdate);
+
+      // ================================================================
+      // INITIALIZE
+      // ================================================================
+      window.addEventListener("DOMContentLoaded", () => {
+        selectProject(
+          "wonderland",
+          document.querySelector(".projects-nav button.active")
+        );
+      });
+    </script>
+  </body>
+</html>
