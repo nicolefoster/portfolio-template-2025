@@ -1,6 +1,6 @@
 # Report: Use of AI in my project
 
-## Paso 1: Creating the base for my web
+## First Step: Creating the base for my web
 
 First, I uploaded some photos of my Figma designs to Claude to show how I wanted my website to look. These images served as a reference so Claude could generate suggestions and content related to the visual style I was aiming for.
 
