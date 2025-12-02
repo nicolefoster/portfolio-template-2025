@@ -73,4 +73,24 @@
        */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1); /* "Power2.out" equivalent */
   --duration-normal: 0.6s; /* Default animation duration */
+
+  /*
+       * TYPOGRAPHY TOKENS
+       *
+       * Centralizes font families, weights, and styles for consistent
+       * typography across the entire design system.
+       */
+  --font-family-base: Georgia, serif; /* Primary body font */
+  --font-family-mono: "SFMono-Regular", Menlo, Consolas, "Courier New",
+    monospace; /* Code blocks */
+
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --line-height-tight: 1.2; /* Headings and short text */
+  --line-height-normal: 1.6; /* Body text (current default) */
+  --line-height-relaxed: 1.8; /* Long-form content */
 }
