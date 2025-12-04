@@ -280,7 +280,7 @@ h6,
   background: var(--color-accent);
   color: white;
   font-weight: 600;
-  border-radius: 8px;
+  border-radius: 24px; /* more rounded */
   transition: background 0.3s, transform 0.3s;
 }
 
@@ -298,15 +298,15 @@ h6,
 }
 
 .about-grid {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: var(--space-xl);
 }
 
-@media (min-width: 768px) {
-  .about-grid {
-    grid-template-columns: 1fr 1fr;
-    align-items: start;
-  }
+.about-text {
+  text-align: center;
+  max-width: 600px;
 }
 
 .about-text p {
@@ -315,15 +315,23 @@ h6,
 }
 
 .skills-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: var(--space-md);
+  width: 100%;
 }
 
 .skill-card {
   background: var(--color-bg);
   padding: var(--space-md);
-  border-radius: 12px;
+  border-radius: 50%; /* circular */
+  width: 120px;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
 }
 
@@ -341,7 +349,7 @@ h6,
 .skill-bar {
   height: 6px;
   background: var(--color-bg-alt);
-  border-radius: 3px;
+  border-radius: 6px; /* more rounded */
   overflow: hidden;
 }
 
@@ -380,7 +388,7 @@ h6,
 
 .project-card {
   background: var(--color-bg-alt);
-  border-radius: 16px;
+  border-radius: 24px; /* more rounded */
   overflow: hidden;
   transition: transform 0.3s, box-shadow 0.3s;
 }

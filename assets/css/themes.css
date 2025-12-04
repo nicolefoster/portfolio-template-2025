@@ -57,9 +57,9 @@
   --color-bg: #0f0f0f; /* Near-black background */
   --color-bg: #f4ecdc; /* Warm beige background */
   --color-bg-alt: #efe6d1; /* Slightly darker beige for sections */
-  --color-text: #2a24f5; /* Primary text now blue as requested */
-  --color-text-muted: #6f6bf0; /* Muted blue for secondary content */
-  --color-accent: #2a24f5; /* Accent matches the text (pills / borders) */
+  --color-text: #130e9d; /* Primary text now blue as requested */
+  --color-text-muted: #241fb0; /* Muted blue for secondary content */
+  --color-accent: #1510ad; /* Accent matches the text (pills / borders) */
   --color-accent-hover: #7069ff; /* Softer hover variant of the accent */
 
   /*
