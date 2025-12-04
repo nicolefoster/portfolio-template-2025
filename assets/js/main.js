@@ -348,6 +348,25 @@ document.addEventListener("DOMContentLoaded", () => {
   initActiveNav();
 
   console.log("🚀 Grade 1 Demo: Vanilla scroll animations initialized");
+
+  // Mobile nav toggle behavior
+  const navToggle = document.querySelector(".nav-toggle");
+  const navLinks = document.querySelector(".nav-links");
+  if (navToggle && navLinks) {
+    navToggle.addEventListener("click", () => {
+      const expanded = navToggle.getAttribute("aria-expanded") === "true";
+      navToggle.setAttribute("aria-expanded", String(!expanded));
+      navLinks.classList.toggle("open");
+    });
+
+    // Close mobile menu when a nav link is clicked
+    navLinks.querySelectorAll("a").forEach((a) => {
+      a.addEventListener("click", () => {
+        navLinks.classList.remove("open");
+        navToggle.setAttribute("aria-expanded", "false");
+      });
+    });
+  }
 });
 
 // ==========================================================================

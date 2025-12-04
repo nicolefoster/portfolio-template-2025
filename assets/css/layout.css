@@ -118,7 +118,8 @@
 .hero-bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  /* warm beige gradient to match site theme */
+  background: linear-gradient(135deg, #f6f0e6 0%, #efe6d1 50%, #eedfbf 100%);
   z-index: -1;
 }
 
@@ -211,6 +212,18 @@
   font-weight: 800;
   margin-bottom: var(--space-sm);
   letter-spacing: -0.02em;
+}
+
+/* Ensure all headings use the base font (Georgia) so titles remain consistent */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.section-title,
+.hero-title {
+  font-family: var(--font-family-base);
 }
 
 .hero-subtitle {
