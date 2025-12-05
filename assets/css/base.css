@@ -39,7 +39,17 @@ body {
   font-weight: var(--font-weight-light);
   line-height: 1.6;
   color: var(--color-text);
-  background-color: var(--color-bg);
+  background: linear-gradient(
+    90deg,
+    #feffeb,
+    #fff9e2,
+    #fff1dc,
+    #ffe9db,
+    #ffe2df,
+    #ffdbe7,
+    #ffd6f2,
+    #ffd4fe
+  );
 }
 
 /*

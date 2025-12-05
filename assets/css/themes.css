@@ -54,9 +54,30 @@
        * Dark theme with indigo accent. Limited palette = cohesive design.
        * Semantic naming (bg, text, accent) makes colors self-documenting.
        */
-  --color-bg: #0f0f0f; /* Near-black background */
-  --color-bg: #f4ecdc; /* Warm beige background */
-  --color-bg-alt: #efe6d1; /* Slightly darker beige for sections */
+  /* Use the global 90deg gradient for all backgrounds so the gradient
+      becomes the single source of truth for page and section backgrounds */
+  --color-bg: linear-gradient(
+    90deg,
+    #feffeb,
+    #fff9e2,
+    #fff1dc,
+    #ffe9db,
+    #ffe2df,
+    #ffdbe7,
+    #ffd6f2,
+    #ffd4fe
+  );
+  --color-bg-alt: linear-gradient(
+    90deg,
+    #feffeb,
+    #fff9e2,
+    #fff1dc,
+    #ffe9db,
+    #ffe2df,
+    #ffdbe7,
+    #ffd6f2,
+    #ffd4fe
+  );
   --color-text: #130e9d; /* Primary text now blue as requested */
   --color-text-muted: #241fb0; /* Muted blue for secondary content */
   --color-accent: #1510ad; /* Accent matches the text (pills / borders) */

@@ -118,8 +118,18 @@
 .hero-bg {
   position: absolute;
   inset: 0;
-  /* warm beige gradient to match site theme */
-  background: linear-gradient(135deg, #f6f0e6 0%, #efe6d1 50%, #eedfbf 100%);
+  /* global site background gradient (updated) */
+  background: linear-gradient(
+    90deg,
+    #feffeb,
+    #fff9e2,
+    #fff1dc,
+    #ffe9db,
+    #ffe2df,
+    #ffdbe7,
+    #ffd6f2,
+    #ffd4fe
+  );
   z-index: -1;
 }
 
