@@ -397,7 +397,7 @@ h6,
 }
 
 .project-card {
-  background: var(--color-bg-alt);
+  background: #feffeb;
   border-radius: 24px; /* more rounded */
   overflow: hidden;
   transition: transform 0.3s, box-shadow 0.3s;
