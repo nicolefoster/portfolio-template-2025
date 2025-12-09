@@ -325,7 +325,122 @@ function initActiveNav() {
 
   // Observe all sections with IDs
   sections.forEach((section) => navObserver.observe(section));
+
+  // Parallax for elements with [data-parallax]
+  const initParallax = () => {
+    const elems = Array.from(document.querySelectorAll("[data-parallax]"));
+    if (!elems.length) return;
+
+    let ticking = false;
+
+    const update = () => {
+      const vh = window.innerHeight;
+      elems.forEach((el) => {
+        // speed 0 = no movement, 0.2 = subtle
+        const speed = parseFloat(el.getAttribute("data-speed")) || 0.15;
+        const rect = el.getBoundingClientRect();
+        // center of element relative to viewport center (-1 .. 1)
+        const elCenter = rect.top + rect.height / 2;
+        const distanceFromCenter = (elCenter - vh / 2) / (vh / 2);
+        // translate amount in px (tuned multiplier)
+        const translateY = Math.round(distanceFromCenter * speed * 40);
+        el.style.transform = `translateY(${translateY}px)`;
+      });
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+    };
+
+    // Initial update and listeners
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+  };
+
+  initParallax();
 }
+
+// --------------------------------------------------------------------------
+// Decorative scroll-activated dots (user-supplied implementation)
+// --------------------------------------------------------------------------
+const initScrollDots = () => {
+  // Respect reduced motion preference
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  if (window._pageDotsInited) return;
+  window._pageDotsInited = true;
+
+  const dots = [];
+  const numDots = 50; // Adjust number of dots
+
+  // Create dots
+  for (let i = 0; i < numDots; i++) {
+    const dot = document.createElement("div");
+    dot.className = "dot";
+
+    const size = Math.random() * 10 + 5;
+    const x = Math.random() * window.innerWidth;
+    const y = Math.random() * (document.body.scrollHeight - window.innerHeight);
+    const speed = Math.random() * 0.5 + 0.2;
+    const delay = Math.random() * 3;
+
+    dot.style.width = `${size}px`;
+    dot.style.height = `${size}px`;
+    dot.style.left = `${x}px`;
+    dot.style.animationDelay = `${delay}s`;
+    dot.style.top = `${y}px`;
+
+    document.body.appendChild(dot);
+
+    dots.push({
+      el: dot,
+      baseY: y,
+      speed: speed,
+      x: x,
+    });
+  }
+
+  let ticking = false;
+
+  const updateDots = () => {
+    const scrollY = window.scrollY;
+
+    dots.forEach((dot) => {
+      const y = dot.baseY - scrollY * dot.speed;
+      dot.el.style.top = `${y}px`;
+
+      // Check if dot is in viewport
+      const inView = y > -50 && y < window.innerHeight + 50;
+      dot.el.style.display = inView ? "block" : "none";
+    });
+
+    ticking = false;
+  };
+
+  const onScroll = () => {
+    if (!ticking) {
+      requestAnimationFrame(updateDots);
+      ticking = true;
+    }
+  };
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", () => {
+    dots.forEach((dot) => {
+      dot.x = Math.random() * window.innerWidth;
+      dot.el.style.left = `${dot.x}px`;
+    });
+    updateDots();
+  });
+
+  // Initial update
+  updateDots();
+};
 
 // ==========================================================================
 // 5. INITIALIZATION
@@ -353,10 +468,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const navToggle = document.querySelector(".nav-toggle");
   const navLinks = document.querySelector(".nav-links");
   if (navToggle && navLinks) {
+    // Initialize aria-hidden based on screen size
+    const mobileQuery = window.matchMedia("(max-width:640px)");
+    const setNavHidden = (isMobile) => {
+      if (isMobile) {
+        navLinks.setAttribute("aria-hidden", "true");
+      } else {
+        navLinks.setAttribute("aria-hidden", "false");
+        navLinks.classList.remove("open");
+        navToggle.setAttribute("aria-expanded", "false");
+      }
+    };
+    setNavHidden(mobileQuery.matches);
+    mobileQuery.addEventListener("change", (e) => setNavHidden(e.matches));
+
     navToggle.addEventListener("click", () => {
       const expanded = navToggle.getAttribute("aria-expanded") === "true";
       navToggle.setAttribute("aria-expanded", String(!expanded));
       navLinks.classList.toggle("open");
+      // Reflect visibility for assistive tech
+      navLinks.setAttribute("aria-hidden", String(expanded));
     });
 
     // Close mobile menu when a nav link is clicked
@@ -364,8 +495,17 @@ document.addEventListener("DOMContentLoaded", () => {
       a.addEventListener("click", () => {
         navLinks.classList.remove("open");
         navToggle.setAttribute("aria-expanded", "false");
+        navLinks.setAttribute("aria-hidden", "true");
       });
     });
+  }
+
+  // Initialize decorative scroll dots
+  try {
+    initScrollDots();
+  } catch (err) {
+    // non-fatal
+    console.warn("parallax dots init failed", err);
   }
 });
 

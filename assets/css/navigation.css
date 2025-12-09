@@ -131,12 +131,12 @@
   .nav-toggle {
     display: block;
   }
-
   .nav-links {
     position: absolute;
-    top: 100%;
+    /* position the menu slightly below the nav so it can "pop" into view */
+    top: calc(100% + 8px);
     right: 50%;
-    transform: translateX(50%) scaleY(0);
+    transform: translateX(50%) translateY(-8px) scale(0.98);
     background: var(--color-bg-alt);
     display: flex;
     flex-direction: column;
@@ -145,15 +145,22 @@
     gap: var(--space-sm);
     list-style: none;
     transform-origin: top center;
-    transition: transform 0.22s var(--ease-out);
+    transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+      opacity 0.22s var(--ease-out);
     width: min(90%, 320px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
     border-radius: 12px;
     z-index: 200;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
   }
 
   .nav-links.open {
-    transform: translateX(50%) scaleY(1);
+    transform: translateX(50%) translateY(0) scale(1);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
   }
 
   .nav-links li {
@@ -169,4 +176,19 @@
     width: 100%;
     padding: calc(var(--space-sm) / 1.2) 0;
   }
+}
+
+/* Hamburger -> X animation when menu is open */
+.nav-toggle[aria-expanded="true"] .hamburger {
+  background: transparent;
+}
+.nav-toggle[aria-expanded="true"] .hamburger::before {
+  transform: translateY(7px) rotate(45deg);
+}
+.nav-toggle[aria-expanded="true"] .hamburger::after {
+  transform: translateY(-7px) rotate(-45deg);
+}
+.nav-toggle[aria-expanded="true"] .hamburger::before,
+.nav-toggle[aria-expanded="true"] .hamburger::after {
+  background: var(--color-accent);
 }
