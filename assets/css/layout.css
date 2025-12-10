@@ -464,6 +464,56 @@ h6,
   }
 }
 
+/* Intro overlay and central dot (before page reveals) */
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg); /* match site background */
+  z-index: 11000; /* above content */
+  transition: opacity 420ms ease;
+}
+.intro-overlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+.intro-dot {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  /* Use the same color stops as the hero background but as a radial fill
+     so the dot visually expands into the page gradient. */
+  background: radial-gradient(
+    circle at 40% 30%,
+    #feffeb 0%,
+    #fff9e2 12%,
+    #fff1dc 24%,
+    #ffe9db 36%,
+    #ffe2df 48%,
+    #ffdbe7 60%,
+    #ffd6f2 76%,
+    #ffd4fe 100%
+  );
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+  animation: introPulse 1200ms ease-in-out infinite;
+}
+@keyframes introPulse {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.95;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.92);
+    opacity: 0.95;
+  }
+}
+
 .project-content {
   padding: var(--space-md);
 }
@@ -748,7 +798,45 @@ h6,
 }
 
 /* --------------------------------------------------------------------------
-   13. Mobile Adjustments
+   13. Cursor Trail Effect
+   -------------------------------------------------------------------------- */
+.cursor-trail {
+  position: fixed;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(42, 36, 245, 0.6),
+    rgba(42, 36, 245, 0.2)
+  );
+  box-shadow: 0 0 8px rgba(42, 36, 245, 0.4);
+  will-change: transform, opacity;
+  z-index: 999;
+}
+
+@keyframes trailFade {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+.cursor-trail.fade {
+  animation: trailFade 0.6s ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-trail {
+    display: none !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   14. Mobile Adjustments
    -------------------------------------------------------------------------- */
 @media (max-width: 640px) {
   .nav-links {

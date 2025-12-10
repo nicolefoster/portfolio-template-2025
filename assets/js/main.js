@@ -507,6 +507,18 @@ document.addEventListener("DOMContentLoaded", () => {
     // non-fatal
     console.warn("parallax dots init failed", err);
   }
+  // Make hero scroll indicator actionable (click or keyboard -> scroll down)
+  try {
+    initScrollIndicator();
+  } catch (err) {
+    console.warn("scroll indicator init failed", err);
+  }
+  // Initialize cursor trail effect
+  try {
+    initCursorTrail();
+  } catch (err) {
+    console.warn("cursor trail init failed", err);
+  }
 });
 
 // ==========================================================================
@@ -533,3 +545,90 @@ window.cleanupScrollObservers = () => {
   staggerObserver.disconnect();
   console.log("🧹 Observers cleaned up");
 };
+
+// Scroll indicator: when clicked (or Enter/Space) scroll to the next section
+function initScrollIndicator() {
+  const indicator = document.querySelector(".scroll-indicator");
+  if (!indicator) return;
+
+  // Choose target: prefer #about, fallback to the next section after hero
+  let target = document.querySelector("#about");
+  if (!target) {
+    const hero = document.querySelector("#hero");
+    target = hero ? hero.nextElementSibling : null;
+  }
+  if (!target) return;
+
+  // Make it behave like a button for accessibility
+  indicator.setAttribute("role", "button");
+  if (!indicator.hasAttribute("tabindex"))
+    indicator.setAttribute("tabindex", "0");
+
+  const doScroll = () => {
+    const navHeight = document.querySelector(".nav")?.offsetHeight || 0;
+    const targetPosition =
+      target.getBoundingClientRect().top + window.scrollY - navHeight;
+    window.scrollTo({ top: targetPosition, behavior: "smooth" });
+  };
+
+  indicator.addEventListener("click", (e) => {
+    e.preventDefault();
+    doScroll();
+  });
+
+  indicator.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      doScroll();
+    }
+  });
+}
+
+// Cursor trail effect: create particles that follow and fade
+function initCursorTrail() {
+  // Skip if user prefers reduced motion
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  if (window._cursorTrailInited) return;
+  window._cursorTrailInited = true;
+
+  let lastX = 0;
+  let lastY = 0;
+
+  const createTrailParticle = (x, y) => {
+    const particle = document.createElement("div");
+    particle.className = "cursor-trail";
+
+    // Random size between 4px and 10px
+    const size = Math.random() * 6 + 4;
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+    particle.style.left = `${x - size / 2}px`;
+    particle.style.top = `${y - size / 2}px`;
+
+    document.body.appendChild(particle);
+
+    // Add fade animation
+    particle.classList.add("fade");
+
+    // Remove particle from DOM after animation completes
+    setTimeout(() => {
+      if (particle.parentNode) particle.parentNode.removeChild(particle);
+    }, 600);
+  };
+
+  const onMouseMove = (e) => {
+    const x = e.clientX;
+    const y = e.clientY;
+
+    // Only create particles if mouse has moved far enough (distance threshold)
+    const distance = Math.hypot(x - lastX, y - lastY);
+    if (distance > 8) {
+      createTrailParticle(x, y);
+      lastX = x;
+      lastY = y;
+    }
+  };
+
+  document.addEventListener("mousemove", onMouseMove, { passive: true });
+}
