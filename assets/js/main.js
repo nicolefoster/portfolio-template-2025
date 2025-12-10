@@ -458,11 +458,52 @@ const initScrollDots = () => {
  * If your script is at end of <body> or has 'defer', it's optional but good practice.
  */
 document.addEventListener("DOMContentLoaded", () => {
-  initScrollAnimations();
-  initSmoothScroll();
-  initActiveNav();
+  // Respect reduced motion: skip intro animation if user prefers reduced motion
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
 
-  console.log("🚀 Grade 1 Demo: Vanilla scroll animations initialized");
+  const runInits = () => {
+    initScrollAnimations();
+    initSmoothScroll();
+    initActiveNav();
+
+    console.log("🚀 Grade 1 Demo: Vanilla scroll animations initialized");
+
+    // Initialize decorative scroll dots (if not created by intro)
+    try {
+      initScrollDots();
+    } catch (err) {
+      // non-fatal
+      console.warn("parallax dots init failed", err);
+    }
+    // Make hero scroll indicator actionable (click or keyboard -> scroll down)
+    try {
+      initScrollIndicator();
+    } catch (err) {
+      console.warn("scroll indicator init failed", err);
+    }
+    // Initialize cursor trail effect
+    try {
+      initCursorTrail();
+    } catch (err) {
+      console.warn("cursor trail init failed", err);
+    }
+    // Initialize animated skill progress bars
+    try {
+      initSkillBars();
+    } catch (err) {
+      console.warn("skill bars init failed", err);
+    }
+  };
+
+  if (prefersReducedMotion) {
+    // Skip fancy intro for users who prefer reduced motion
+    runInits();
+  } else {
+    // Show intro overlay, then initialize when done
+    createIntroOverlay().then(() => runInits());
+  }
 
   // Mobile nav toggle behavior
   const navToggle = document.querySelector(".nav-toggle");
@@ -526,6 +567,152 @@ document.addEventListener("DOMContentLoaded", () => {
     console.warn("skill bars init failed", err);
   }
 });
+
+// ===========================================================================
+// INTRO: Loading overlay with exploding dots that seed the persistent dots
+// ===========================================================================
+function createIntroOverlay() {
+  return new Promise((resolve) => {
+    if (window._introShown) return resolve();
+    window._introShown = true;
+
+    // Create overlay
+    const overlay = document.createElement("div");
+    overlay.className = "intro-overlay";
+
+    // Central blue dot
+    const centerDot = document.createElement("div");
+    centerDot.className = "intro-dot";
+    // Use the site's muted blue color token if available, fall back to hex
+    const rootStyles = getComputedStyle(document.documentElement);
+    const blue = rootStyles.getPropertyValue("--color-text-muted") || "#241fb0";
+    centerDot.style.background = blue.trim() || "#241fb0";
+    centerDot.style.width = "36px";
+    centerDot.style.height = "36px";
+    centerDot.style.borderRadius = "50%";
+    centerDot.style.boxShadow = "0 18px 40px rgba(0,0,0,0.12)";
+
+    overlay.appendChild(centerDot);
+    document.body.appendChild(overlay);
+
+    // After a short delay, explode into particles
+    const explodeDelay = 700; // ms
+    const particleCount = 48;
+
+    setTimeout(() => {
+      const particles = [];
+      const rect = centerDot.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+
+      for (let i = 0; i < particleCount; i++) {
+        const p = document.createElement("div");
+        p.className = "intro-particle";
+        const size = Math.random() * 10 + 4;
+        p.style.position = "fixed";
+        p.style.left = `${cx - size / 2}px`;
+        p.style.top = `${cy - size / 2}px`;
+        p.style.width = `${size}px`;
+        p.style.height = `${size}px`;
+        p.style.borderRadius = "50%";
+        p.style.background = blue.trim() || "#241fb0";
+        p.style.pointerEvents = "none";
+        p.style.zIndex = 10999;
+        p.style.transition = `transform 900ms cubic-bezier(.22,1,.36,1), opacity 900ms ease`;
+
+        document.body.appendChild(p);
+        particles.push(p);
+
+        // compute random angle & distance
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 80 + Math.random() * 160;
+        const dx = Math.cos(angle) * distance;
+        const dy = Math.sin(angle) * distance;
+
+        // apply transform in next frame to trigger transition
+        requestAnimationFrame(() => {
+          p.style.transform = `translate(${dx}px, ${dy}px) scale(${
+            0.9 + Math.random() * 0.8
+          })`;
+          p.style.opacity = "0";
+        });
+      }
+
+      // After particles finish, remove overlay & particles, then create persistent dots
+      setTimeout(() => {
+        particles.forEach((p) => p.remove());
+        if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+
+        // Seed persistent parallax dots so they match the exploded particles
+        createPersistentDots(50);
+
+        resolve();
+      }, 1000);
+    }, explodeDelay);
+  });
+}
+
+function createPersistentDots(numDots = 50) {
+  if (window._pageDotsInited) return;
+  window._pageDotsInited = true;
+
+  const dots = [];
+  for (let i = 0; i < numDots; i++) {
+    const dot = document.createElement("div");
+    dot.className = "dot";
+
+    const size = Math.random() * 10 + 5;
+    const x = Math.random() * window.innerWidth;
+    const y = Math.random() * (document.body.scrollHeight - window.innerHeight);
+    const speed = Math.random() * 0.5 + 0.2;
+    const delay = Math.random() * 3;
+
+    dot.style.width = `${size}px`;
+    dot.style.height = `${size}px`;
+    dot.style.left = `${x}px`;
+    dot.style.top = `${y}px`;
+    dot.style.animationDelay = `${delay}s`;
+
+    document.body.appendChild(dot);
+
+    dots.push({ el: dot, baseY: y, speed, x });
+  }
+
+  let ticking = false;
+
+  const updateDots = () => {
+    const scrollY = window.scrollY;
+    dots.forEach((dot) => {
+      const y = dot.baseY - scrollY * dot.speed;
+      dot.el.style.top = `${y}px`;
+      const inView = y > -50 && y < window.innerHeight + 50;
+      dot.el.style.display = inView ? "block" : "none";
+    });
+    ticking = false;
+  };
+
+  const onScroll = () => {
+    if (!ticking) {
+      requestAnimationFrame(updateDots);
+      ticking = true;
+    }
+  };
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", () => {
+    dots.forEach((dot) => {
+      dot.x = Math.random() * window.innerWidth;
+      dot.el.style.left = `${dot.x}px`;
+    });
+    updateDots();
+  });
+
+  // store for possible future access
+  window._pageDots = dots;
+
+  // initial update
+  updateDots();
+}
 
 // ==========================================================================
 // 6. CLEANUP (FOR SPA ENVIRONMENTS)
