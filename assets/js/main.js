@@ -519,6 +519,12 @@ document.addEventListener("DOMContentLoaded", () => {
   } catch (err) {
     console.warn("cursor trail init failed", err);
   }
+  // Initialize animated skill progress bars
+  try {
+    initSkillBars();
+  } catch (err) {
+    console.warn("skill bars init failed", err);
+  }
 });
 
 // ==========================================================================
@@ -631,4 +637,64 @@ function initCursorTrail() {
   };
 
   document.addEventListener("mousemove", onMouseMove, { passive: true });
+}
+
+// Animated skill progress bars: animate width and count when in view
+function initSkillBars() {
+  if (
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  ) {
+    // If reduced motion, reveal final states immediately
+    document.querySelectorAll(".skill").forEach((skill) => {
+      const progress = skill.querySelector(".skill-progress");
+      const percentage = skill.querySelector(".skill-percentage");
+      const target = parseInt(skill.dataset.skill, 10) || 0;
+      progress.style.width = target + "%";
+      percentage.textContent = target + "%";
+    });
+    return;
+  }
+
+  const skills = Array.from(document.querySelectorAll(".skill"));
+  if (!skills.length) return;
+
+  const observer = new IntersectionObserver(
+    (entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const skill = entry.target;
+          const progress = skill.querySelector(".skill-progress");
+          const percentage = skill.querySelector(".skill-percentage");
+          const target = parseInt(skill.dataset.skill, 10) || 0;
+
+          if (!progress.classList.contains("animate")) {
+            progress.classList.add("animate");
+            // Set CSS width (uses --skill-width via inline style already)
+            progress.style.width = target + "%";
+
+            // Count up animation
+            let current = 0;
+            const duration = 1800; // ms
+            const start = performance.now();
+
+            const step = (now) => {
+              const elapsed = now - start;
+              const pct = Math.min(1, elapsed / duration);
+              const value = Math.round(pct * target);
+              percentage.textContent = value + "%";
+              if (pct < 1) requestAnimationFrame(step);
+              else percentage.textContent = target + "%";
+            };
+            requestAnimationFrame(step);
+          }
+
+          obs.unobserve(skill);
+        }
+      });
+    },
+    { root: null, rootMargin: "0px 0px -10% 0px", threshold: 0.1 }
+  );
+
+  skills.forEach((s) => observer.observe(s));
 }

@@ -305,6 +305,7 @@ h6,
    -------------------------------------------------------------------------- */
 .about {
   background: var(--color-bg-alt);
+  position: relative; /* contain the left-side skills panel */
 }
 
 .about-grid {
@@ -324,12 +325,200 @@ h6,
   color: var(--color-text-muted);
 }
 
+.skills-panel {
+  /* Centered and stacked below the skills grid */
+  position: relative;
+  transform: none;
+  margin: var(--space-lg) auto 0;
+  width: min(60%, 820px);
+  padding: var(--space-lg);
+  background: rgba(255, 255, 255, 0.06); /* subtle translucent card */
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+  color: var(--color-text);
+  z-index: 2;
+}
+
+.skills-panel h3 {
+  margin-top: 0;
+  margin-bottom: var(--space-md);
+  font-size: var(--text-xl);
+}
+
+.skills-panel p {
+  margin-bottom: var(--space-md);
+  color: var(--color-text-muted);
+}
+
+.skills-panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+/* Layout for the skills row (panel + progress bars) */
+.skills-row {
+  display: flex;
+  gap: var(--space-lg);
+  align-items: stretch; /* make both columns equal height */
+  margin-top: var(--space-lg);
+}
+
+/* Make both the panel and progress card share the same card styling
+   and occupy equal space */
+.skills-panel,
+.skills-progress {
+  flex: 1 1 0; /* equal flexible columns */
+  padding: var(--space-lg);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+  color: var(--color-text);
+  min-width: 260px;
+}
+
+.skills-progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* Ensure both skills cards align perfectly when placed in the row:
+   - Remove the external top margin that previously offset the left card
+   - Force both columns to layout as column-flex containers so their
+     internal flow is consistent
+   - Allow proper shrinking by setting min-height: 0 on flex items
+ */
+.skills-row .skills-panel,
+.skills-row .skills-progress {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* Skill progress bar styles (adapted from provided reference) */
+.skill {
+  width: 100%;
+}
+
+.skill-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.skill-name {
+  font-size: var(--text-base);
+  font-weight: 600;
+}
+
+.skill-percentage {
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.skill-bar {
+  width: 100%;
+  height: 14px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.skill-progress {
+  height: 100%;
+  border-radius: 999px;
+  position: relative;
+  width: 0;
+  transition: width 1.8s var(--ease-out);
+  background: linear-gradient(90deg, var(--color-text-muted), #4a45d9);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+}
+
+.skill-progress::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.18),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.skill-progress.animate {
+  width: var(--skill-width);
+}
+
+@media (max-width: 900px) {
+  .skills-row {
+    flex-direction: column;
+  }
+  .skills-panel {
+    flex: none;
+    width: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .skills-panel {
+    position: static;
+    transform: none;
+    width: 100%;
+    max-width: none;
+    margin-top: var(--space-lg);
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
 .skills-grid {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; /* keep circles on a single horizontal line */
   justify-content: center;
+  align-items: center;
   gap: var(--space-md);
   width: 100%;
+  overflow-x: auto; /* allow horizontal scroll on narrow screens */
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: var(--space-sm);
+}
+
+.skills-grid .skill-card {
+  flex: 0 0 auto; /* prevent shrinking when container is narrow */
+}
+
+@media (max-width: 640px) {
+  .skills-grid {
+    /* On very small screens allow wrapping so items can stack */
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }
 
 .skill-card {
