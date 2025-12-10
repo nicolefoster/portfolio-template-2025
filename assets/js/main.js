@@ -595,9 +595,14 @@ function createIntroOverlay() {
     overlay.appendChild(centerDot);
     document.body.appendChild(overlay);
 
-    // After a short delay, explode into particles
+    // After a short delay, do a small scale pulse then explode into particles
     const explodeDelay = 700; // ms
     const particleCount = 48;
+
+    // gentle scale to hint at explosion
+    centerDot.style.transition =
+      "transform 320ms cubic-bezier(.22,1,.36,1), opacity 320ms ease";
+    centerDot.style.transform = "scale(1.12)";
 
     setTimeout(() => {
       const particles = [];
@@ -638,15 +643,28 @@ function createIntroOverlay() {
         });
       }
 
-      // After particles finish, remove overlay & particles, then create persistent dots
+      // After particles finish, fade the overlay out, then remove DOM nodes
       setTimeout(() => {
-        particles.forEach((p) => p.remove());
-        if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+        // start overlay fade (CSS handles fade duration ~420ms)
+        overlay.classList.add("fade-out");
 
-        // Seed persistent parallax dots so they match the exploded particles
-        createPersistentDots(50);
+        // also fade the centerDot quickly if still present
+        if (centerDot && centerDot.style) {
+          centerDot.style.opacity = "0";
+          centerDot.style.transform = "scale(0.9)";
+        }
 
-        resolve();
+        // wait for fade transition to complete before removing elements
+        const fadeMs = 460; // slightly longer than CSS 420ms transition
+        setTimeout(() => {
+          particles.forEach((p) => p.remove());
+          if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+
+          // Seed persistent parallax dots so they match the exploded particles
+          createPersistentDots(50);
+
+          resolve();
+        }, fadeMs);
       }, 1000);
     }, explodeDelay);
   });
