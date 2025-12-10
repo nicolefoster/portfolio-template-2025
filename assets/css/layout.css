@@ -217,6 +217,14 @@
   z-index: 1;
 }
 
+/* Center hero content and provide layout for rotating text */
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
 .hero-title {
   font-size: var(--text-4xl);
   font-weight: 800;
@@ -240,6 +248,112 @@ h6,
   font-size: var(--text-xl);
   color: var(--color-text-muted);
   margin-bottom: var(--space-lg);
+}
+
+/* Keep the prefix + rotating words on a single line on wider screens */
+.hero-subtitle {
+  white-space: nowrap;
+}
+
+/* Rotating text component */
+.rotating-prefix {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 500;
+}
+
+.rotating-words {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  vertical-align: middle;
+  /* Reserve space to avoid layout shift (approx width of longest word) */
+  min-width: 8ch;
+  height: 1em; /* keep line-height consistent */
+  overflow: visible;
+  /* offset used to slide words in/out relative to vertical center */
+  --rotate-offset: 1.1em;
+}
+
+.rotating-word {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  opacity: 0;
+  /* start slightly below center, center = translateY(-50%) */
+  transform: translateY(calc(-50% + var(--rotate-offset)));
+  display: block;
+  width: 100%;
+  text-align: left;
+  animation-name: rotateWord;
+  animation-duration: 9s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+
+@keyframes rotateWord {
+  0% {
+    opacity: 0;
+    transform: translateY(calc(-50% + var(--rotate-offset)));
+  }
+  11.11% {
+    opacity: 1;
+    transform: translateY(-50%);
+  }
+  22.22% {
+    opacity: 1;
+    transform: translateY(-50%);
+  }
+  33.33% {
+    opacity: 0;
+    transform: translateY(calc(-50% - var(--rotate-offset)));
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(calc(-50% - var(--rotate-offset)));
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .hero-subtitle {
+    font-size: var(--text-base);
+    margin-bottom: var(--space-md);
+  }
+  .rotating-words {
+    min-width: 7ch;
+  }
+  .rotating-word {
+    transform: translateY(calc(-50% + 0.7em));
+  }
+  /* Allow wrapping on small screens so the text doesn't overflow */
+  .hero-subtitle {
+    white-space: normal;
+  }
+  @keyframes rotateWord {
+    0% {
+      opacity: 0;
+      transform: translateY(calc(-50% + 0.7em));
+    }
+    11.11% {
+      opacity: 1;
+      transform: translateY(-50%);
+    }
+    22.22% {
+      opacity: 1;
+      transform: translateY(-50%);
+    }
+    33.33% {
+      opacity: 0;
+      transform: translateY(calc(-50% - 0.7em));
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(calc(-50% - 0.7em));
+    }
+  }
 }
 
 /* Scroll Indicator */
