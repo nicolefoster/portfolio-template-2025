@@ -230,6 +230,9 @@
   font-weight: 800;
   margin-bottom: var(--space-sm);
   letter-spacing: -0.02em;
+  /* Initial state: invisible and positioned below for GSAP animation */
+  opacity: 0;
+  transform: translateY(50px);
 }
 
 /* Ensure all headings use the base font (Georgia) so titles remain consistent */

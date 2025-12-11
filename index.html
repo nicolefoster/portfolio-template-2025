@@ -122,7 +122,7 @@
           <!-- Skills row: left = My Skills card, right = animated progress bars -->
           <div class="skills-row">
             <aside
-              class="skills-panel animate-on-scroll"
+              class="skills-panel slide-left"
               aria-labelledby="skills-panel-title"
             >
               <h3 id="skills-panel-title">My Skills</h3>
@@ -140,7 +140,7 @@
               </ul>
             </aside>
 
-            <div class="skills-progress" aria-hidden="false">
+            <div class="skills-progress slide-right" aria-hidden="false">
               <div class="skill" data-skill="90">
                 <div class="skill-info">
                   <span class="skill-name">Adobe</span>
@@ -332,9 +332,16 @@
     <!-- Footer -->
     <footer class="footer">
       <div class="container">
-        <p>&copy; 2025 Jane Developer. Built with vanilla HTML, CSS & JS.</p>
+        <p>&copy; 2025 Nicole Foster. Built with vanilla HTML, CSS & JS.</p>
         <a href="#hero" class="back-to-top" aria-label="Back to top">↑</a>
       </div>
     </footer>
+
+    <!-- GSAP Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <!-- ScrollTrigger Plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <!-- GSAP Animation Script -->
+    <script src="./assets/js/gsap-animations.js"></script>
   </body>
 </html>
