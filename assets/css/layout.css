@@ -1,3 +1,77 @@
+/* Footer GitHub row styling */
+.footer-icons-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 0.25em;
+}
+.footer-github-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  text-decoration: none;
+}
+.footer-github-link:hover .footer-github-text {
+  text-decoration: underline;
+}
+.footer-github-text {
+  color: var(--color-text-muted);
+  font-size: 0.95em;
+  letter-spacing: 0.01em;
+}
+/* Footer left column for icon and copyright */
+.footer-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+.footer-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+.footer-flex .footer-icons {
+  margin-top: 0;
+  justify-content: flex-start;
+}
+.footer-copyright {
+  margin: 0;
+  font-size: 0.95em;
+  color: var(--color-text-muted);
+}
+/* Footer layout for left-aligned icon */
+.footer-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+.footer-flex .footer-icons {
+  margin-top: 0;
+  justify-content: flex-start;
+}
+.github-icon {
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+}
+/* Footer GitHub icon styling */
+.footer-icons {
+  margin-top: var(--space-md);
+  display: flex;
+  justify-content: center;
+  gap: var(--space-md);
+}
+.github-icon {
+  transition: transform 0.2s;
+  filter: grayscale(0.2) brightness(0.95);
+}
+.github-icon:hover {
+  transform: scale(1.12) rotate(-6deg);
+  filter: grayscale(0) brightness(1.1);
+}
 /* About section card for text background */
 .about-text-card {
   background: rgba(255, 255, 255, 0.06); /* subtle translucent card */
