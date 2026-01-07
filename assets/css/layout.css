@@ -1,3 +1,17 @@
+/* About section card for text background */
+.about-text-card {
+  background: rgba(255, 255, 255, 0.06); /* subtle translucent card */
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+  color: var(--color-text);
+  padding: var(--space-lg);
+  max-width: 600px;
+  margin: 0 auto var(--space-lg) auto;
+  text-align: center;
+  z-index: 2;
+}
 /* ==========================================================================
    GRADE 1: VANILLA CSS PORTFOLIO DEMO
    Scroll Architecture with IntersectionObserver + CSS scroll-timeline

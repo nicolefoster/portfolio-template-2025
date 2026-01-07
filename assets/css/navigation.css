@@ -63,7 +63,7 @@
 }
 .nav-links li {
   background: transparent;
-  padding: var(--space-md) var(--space-xl); /* increased padding per request */
+  padding: var(--space-sm) var(--space-md); /* reduced padding for smaller pills */
   border-radius: 999px;
   display: inline-flex;
   align-items: center;
